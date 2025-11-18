@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<definitions name="Product"
+    targetNamespace="http://localhost/soap/service"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="http://localhost/soap/service"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <message name="helloRequest">
+        <part name="name" type="xsd:string"/>
+    </message>
+
+    <message name="helloResponse">
+        <part name="return" type="xsd:string"/>
+    </message>
+
+    <message name="sumRequest">
+        <part name="a" type="xsd:int"/>
+        <part name="b" type="xsd:int"/>
+    </message>
+
+    <message name="sumResponse">
+        <part name="return" type="xsd:int"/>
+    </message>
+
+    <portType name="ProductPortType">
+        <operation name="hello">
+            <input message="tns:helloRequest"/>
+            <output message="tns:helloResponse"/>
+        </operation>
+
+        <operation name="sum">
+            <input message="tns:sumRequest"/>
+            <output message="tns:sumResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="ProductBinding" type="tns:ProductPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        
+        <operation name="hello">
+            <soap:operation soapAction="hello"/>
+            <input><soap:body use="encoded" namespace="urn:Product" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="urn:Product" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+
+        <operation name="sum">
+            <soap:operation soapAction="sum"/>
+            <input><soap:body use="encoded" namespace="urn:Product" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="urn:Product" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+    </binding>
+
+    <service name="Product">
+        <port name="ProductPort" binding="tns:ProductBinding">
+            <soap:address location="http://localhost/soap/server.php"/>
+        </port>
+    </service>
+
+</definitions>
