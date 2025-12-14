@@ -1,0 +1,27 @@
+Array
+(
+    [Host] => localhost
+    [Connection] => Keep-Alive
+    [User-Agent] => PHP-SOAP/8.4.14
+    [Content-Type] => text/xml; charset=utf-8
+    [SOAPAction] => "http://localhost/soap/service#createProduct"
+    [Content-Length] => 490
+)
+Array
+(
+    [Host] => localhost
+    [Connection] => Keep-Alive
+    [User-Agent] => PHP-SOAP/8.4.14
+    [Content-Type] => text/xml; charset=utf-8
+    [SOAPAction] => "http://localhost/soap/service#createProduct"
+    [Content-Length] => 490
+)
+no heradersArray
+(
+    [Host] => localhost
+    [Connection] => Keep-Alive
+    [User-Agent] => PHP-SOAP/8.4.14
+    [Content-Type] => text/xml; charset=utf-8
+    [SOAPAction] => "http://localhost/soap/service#createProduct"
+    [Content-Length] => 490
+)

@@ -11,7 +11,7 @@ class Database
     private $username = "root";
     private $password = "password";
     private $dbName = "ecom";
-    private $connection = "";
+    private $connection;
 
     public function __construct(){
         try {
