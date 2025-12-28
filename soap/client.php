@@ -5,13 +5,28 @@ error_reporting(E_ALL);
 ini_set("soap.wsdl_cache_enabled", "0");
 
 
+
 try {
-    $client = new SoapClient("http://localhost/soap/service.wsdl");
+    $auth = [
+        'login' => 'admin1',
+        'password' => 'admin123'
+    ];
 
-    $products = $client->getProducts();
+    $client = new SoapClient("http://localhost/soap/service.wsdl",$auth);
 
-    echo "<pre>"; print_r($products); exit;
+    $prodArr = [
+        'name' => 'test',
+        'desc' => 'test123',
+        'created_date' => date('Y-m-d')
+    ];
 
+    $response = $client->createProduct($prodArr);
+
+    ?>
+    <h2><?php echo $response->message; ?></h2>
+    <?php
+
+    
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }

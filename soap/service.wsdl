@@ -10,26 +10,51 @@
     
     <types>
         <xsd:schema targetNamespace="http://localhost/soap/service">
+            <xsd:complexType name="AuthHeaderType">
+                <xsd:sequence>
+                    <xsd:element name="username" type="xsd:string"/>
+                    <xsd:element name="apiKey" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
 
+            <xsd:element name="AuthHeader" type="tns:AuthHeaderType"/>
             <xsd:complexType name="Product">
                 <xsd:sequence>
                     <xsd:element name="id" type="xsd:int"/>
                     <xsd:element name="name" type="xsd:string"/>
                     <xsd:element name="desc" type="xsd:string"/>
-                    <xsd:element name="created_date" type="xsd:datetime"/>
+                    <xsd:element name="created_date" type="xsd:dateTime"/>
                 </xsd:sequence>
             </xsd:complexType>
-
             <xsd:complexType name="ArrayOfProduct">
                 <xsd:sequence>
                     <xsd:element name="Product" type="tns:Product" maxOccurs="unbounded"/>
                 </xsd:sequence>
             </xsd:complexType>
 
+            <xsd:complexType name="CreateProductRequest">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="desc" type="xsd:string"/>
+                    <xsd:element name="created_date" type="xsd:dateTime"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="CreateProductResponse">
+                <xsd:sequence>
+                    <xsd:element name="status" type="xsd:boolean"/>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="id" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>  
+                   
         </xsd:schema>
     </types>
 
-    
+    <message name="AuthHeaderMessage">
+        <part name="AuthHeader" type="tns:AuthHeader"/>
+    </message>
+
     <message name="helloRequest">
         <part name="name" type="xsd:string"/>
     </message>
@@ -46,11 +71,28 @@
     <message name="sumResponse">
         <part name="return" type="xsd:int"/>
     </message>
+    
+    <!-- Messages -->
+    <message name="getProductByIdRequest">
+        <part name="id" element="xsd:int"/>
+    </message>
+
+    <message name="getProductByIdResponse">
+        <part name="return" element="tns:Product"/>
+    </message>
 
     <message name="getProductsRequest" />
 
     <message name="getProductsResponse">
         <part name="products" type="tns:ArrayOfProduct"/>
+    </message>
+
+    <message name="createProductRequest">
+        <part name="product" type="tns:CreateProductRequest"/>
+    </message>
+
+    <message name="createProductResponse">
+        <part name="return" type="tns:CreateProductResponse"/>
     </message>
 
     
@@ -66,9 +108,19 @@
             <output message="tns:sumResponse"/>
         </operation>
 
+        <operation name="getProductById">
+            <input message="tns:getProductByIdRequest"/>
+            <output message="tns:getProductByIdResponse"/>
+        </operation>
+
         <operation name="getProducts">
             <input message="tns:getProductsRequest"/>
             <output message="tns:getProductsResponse"/>
+        </operation>
+
+        <operation name="createProduct">
+            <input message="tns:createProductRequest"/>
+            <output message="tns:createProductResponse"/>
         </operation>
 
     </portType>
@@ -89,17 +141,34 @@
             <output><soap:body use="literal"/></output>
         </operation>
 
+        <operation name="getProductById">
+            <soap:operation soapAction="http://localhost/soap/service#getProductById"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
         <operation name="getProducts">
             <soap:operation soapAction="http://localhost/soap/service#getProducts"/>
             <input><soap:body use="literal"/></input>
             <output><soap:body use="literal"/></output>
         </operation>
+        <operation name="createProduct">
+            <soap:operation soapAction="http://localhost/soap/service#createProduct"/>
+            <input>
+                <soap:header
+                    message="tns:AuthHeaderMessage"
+                    part="AuthHeader"
+                    use="literal"/>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
 
     </binding>
 
-    <!-- ========================= -->
-    <!--         SERVICE           -->
-    <!-- ========================= -->
+    
     <service name="ProductService">
         <port name="ProductPort" binding="tns:ProductBinding">
             <soap:address location="http://localhost/soap/server.php"/>
